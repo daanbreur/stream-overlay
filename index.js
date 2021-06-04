@@ -111,15 +111,27 @@ StreamelementsClient.on('authenticated', (data) => info(`StreamelementsClient`, 
 
 StreamelementsClient.on('event', (data) => {
 	console.log(data);
-	// Structure as on JSON Schema
-});
-StreamelementsClient.on('event:update', (data) => {
-	console.log(data);
-	// Structure as on https://github.com/StreamElements/widgets/blob/master/CustomCode.md#on-session-update
-});
-StreamelementsClient.on('event:reset', (data) => {
-	console.log(data);
-	// Structure as on https://github.com/StreamElements/widgets/blob/master/CustomCode.md#on-session-update
+
+	if (data.provider.toLowerCase() == 'twitch') {
+		switch (data.type.toLowerCase()) {
+			case 'follow':
+				wss.clients.forEach( (ws) => {
+					ws.send(`setfollower ${data.data.displayName}`);
+					ws.send(`alert follow ${data.data.displayName}`);
+				});
+				break;
+			case 'raid':
+				wss.clients.forEach( (ws) => {
+					ws.send(`alert raid ${data.data.displayName} ${data.data.amount}`);
+				});
+				break;
+			case 'host':
+				wss.clients.forEach( (ws) => {
+					ws.send(`alert host ${data.data.displayName}`);
+				});
+				break;
+		}
+	}
 });
 
 // StreamelementsClient.on('event', async (eventData) => {
