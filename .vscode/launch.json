@@ -1,0 +1,50 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+
+    {
+      "name": "Launch index.html",
+      "type": "firefox",
+      "request": "launch",
+      "reAttach": true,
+      "file": "${workspaceFolder}/index.html"
+    },
+    {
+      "name": "Launch localhost",
+      "type": "firefox",
+      "request": "launch",
+      "reAttach": true,
+      "url": "http://localhost:9901/index.html",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "Attach",
+      "type": "firefox",
+      "request": "attach",
+      "pathMappings": [
+        {
+          "url": "http://localhost:9901/index.html",
+          "path": "${workspaceFolder}/public/index.html"
+        },
+        {
+          "url": "http://localhost:9901/index.js",
+          "path": "${workspaceFolder}/public/index.js"
+        },
+        {
+          "url": "http://localhost:9901/helpers.js",
+          "path": "${workspaceFolder}/public/helpers.js"
+        }
+      ]
+    },
+    {
+      "name": "Launch WebExtension",
+      "type": "firefox",
+      "request": "launch",
+      "reAttach": true,
+      "addonPath": "${workspaceFolder}"
+    }
+  ]
+}
