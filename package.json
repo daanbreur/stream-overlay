@@ -1,0 +1,28 @@
+{
+  "name": "twitchoverlay",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "informa-db.js": "^5.5.0",
+    "node-fetch": "^2.6.0",
+    "require-all": "^3.0.0",
+    "socket.io-client": "^2.4.0",
+    "tmi.js": "^1.5.0",
+    "ws": "^7.3.1"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "nodemon": "^2.0.4"
+  }
+}
