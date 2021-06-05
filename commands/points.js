@@ -1,21 +1,17 @@
-const { err } = require( '../logger' );
-const { newUserEntry } = require( '../helpers' );
+const { err } = require("../logger");
+const User = require("../models/User");
 
-module.exports.run = async (client, wss, message, args, {channel, tags}) => {
-	try {
-		let doc = client.database.users[tags['user-id']];
-
-		if (doc == null) {
-			client.say(channel, `@${tags.username}, You have 0 points.`);
-			insert(tags['user-id'], { points: 0 });
-			
-			return;
-		}
-
-		client.say(channel, `@${tags.username}, You have ${doc.points} points.`);
-	} catch (error) {
-		err('Command: points', error)
-	}
+module.exports.run = async (client, wss, message, args, { channel, tags }) => {
+	User.findOne({ twitchId: tags["user-id"] })
+		.then(async (document) => {
+			if (document == null) {
+				User.create({ twitchId: tags["user-id"], displayName: tags["display-name"] });
+				client.say(channel, `@${tags.username}, You have 0 points.`);
+			} else {
+				client.say(channel, `@${tags.username}, You have ${document.points} points.`);
+			}
+		})
+		.catch((err) => err("Command: points", err));
 };
 
 module.exports.config = {
