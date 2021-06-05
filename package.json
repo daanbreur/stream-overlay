@@ -15,6 +15,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "informa-db.js": "^5.5.0",
+    "mongoose": "^5.12.13",
     "node-fetch": "^2.6.0",
     "require-all": "^3.0.0",
     "socket.io-client": "^2.4.0",
