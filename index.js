@@ -1,6 +1,8 @@
 require('dotenv').config();
 
-const { Db, DbUtils } = require('informa-db.js');
+const mongoose = require('mongoose');
+mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true, useUnifiedTopology: true});
+
 const { getLatestFollower, checkColor, bearerToken } = require('./helpers');
 const { log, warn, err, info } = require('./logger');
 
@@ -25,9 +27,10 @@ const client = new TMI.client({
 	},
 	channels: ['portaalgaming'],
 });
+
 client.commands = new Map();
 client.aliases = new Map();
-client.database = new Db('database.json');
+client.database = mongoose.connection;
 client.connect();
 
 global.globalData = {
