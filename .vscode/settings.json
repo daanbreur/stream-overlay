@@ -1,5 +1,9 @@
 {
   "files.exclude": {
-    "**/.env": true
-  }
+    "**/.env": true,
+    "**/node_modules": true
+  },
+  "editor.fontFamily": "OpenDyslexic, Consolas, 'Courier New', monospace",
+  "workbench.colorTheme": "GitHub Dark",
+  "workbench.iconTheme": "material-icon-theme"
 }
