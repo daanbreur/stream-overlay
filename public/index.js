@@ -6,29 +6,28 @@ ws.onopen = () => {
 };
 
 let localData = {
-    follower: '',
-    alertQueue: [],
+    alertQueue: []
 };
 
 const events = {
     "alert": async (args) => { parseAlertParams(args); },
     "color": async (color) => { banner.style.backgroundColor = color; },
     "setfollower": async (username) => { follower.innerText = `Latest Follower: ${username}`; },
-    "updateSong": async (title, artist, imgUrl) => {
-        
-    },
-    "startMsg": async ([transparent, ...message]) => {
-        transparent = (transparent === 'true')
-        message = message.join(' ')
-        if (transparent) { document.getElementsByTagName('body')[0].style['background-color'] = 'rgba(0,0,0,0)' }
-        else { document.getElementsByTagName('body')[0].style['background-color'] = 'black' }
-        MessageText.style.opacity = 1;
-        MessageText.innerText = message.toString();
-        MessageText.setAttribute('data-text', message.toString())
-    },
-    "endMsg": async () => {
-        document.getElementsByTagName('body')[0].style['background-color'] = 'rgba(0,0,0,0)';
-        MessageText.style.opacity = 0;
+    "message": async ([type, ...[transparent, ...message]]) => {
+        console.log(type, transparent, message)
+        if (type === "start") {
+            MessageText.innerHTML = message.join(" ");
+            MessageText.setAttribute("data-text", message.join(" "));
+
+            document.body.style["background-color"] = (transparent === "true") ? "rgba(255,255,255,0)" : "rgba(0,0,0,1)";
+            MessageText.style.opacity = 1;
+        } else if (type === "end") {
+            MessageText.innerHTML = "";
+            MessageText.setAttribute("data-text", "");
+
+            document.body.style["background-color"] = "rgba(255,255,255,0)"
+            MessageText.style.opacity = 0;
+        }
     }
 }
 
@@ -41,6 +40,6 @@ ws.onmessage = (ev) => {
     }
 };
 
-(async () => {
+window.onload = function () {
     MessageText.style.opacity = 0;
-})()
+}
