@@ -133,6 +133,12 @@ StreamelementsClient.on('event', (data) => {
 					ws.send(`alert host ${data.data.displayName}`);
 				});
 				break;
+			case 'tip':
+				let formattedAmount = new Intl.NumberFormat('nl-NL', { style: 'currency', currency: data.data.currency }).format(data.data.amount);
+				wss.clients.forEach( (ws) => {
+					ws.send(`alert donation ${data.data.username} ${formattedAmount}`);
+				});	
+				break;
 		}
 	}
 });
