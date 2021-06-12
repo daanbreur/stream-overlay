@@ -31,6 +31,11 @@ const alertEvents = {
 		let subtext = `${username}`;
 		follower.innerText = `Latest Follower: ${username}`;
 		alertBoxHandler(maintext, subtext);
+	},
+	"cheer": async ([username, amount]) => {
+		let maintext = `Thank you for the bits ❤️`
+		let subtext = `${username} - ${amount} Bits`
+		alertBoxHandler(maintext, subtext);
 	}
 };
 

@@ -144,6 +144,11 @@ StreamelementsClient.on('event', (data) => {
 					ws.send(`alert subscription ${data.data.displayName}`);
 				});
 				break;
+			case 'cheer':
+				wss.clients.forEach( (ws) => {
+					ws.send(`alert cheer ${data.data.displayName} ${data.data.amount}`);
+				});
+				break;
 		}
 	}
 });
