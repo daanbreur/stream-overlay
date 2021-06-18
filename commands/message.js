@@ -14,12 +14,18 @@ module.exports.run = async (client, wss, message, args, {channel, tags}) => {
             wss.clients.forEach(async (ws) => {
               ws.send(`message start ${args[1]} ${messageText}`)
             });
+            global.globalData.message.enabled = true;
+            global.globalData.message.transparent = args[1];
+            global.globalData.message.message = messageText;
           } else {
             client.say(channel, `@${tags.username}, Incorrect Parameters !message enable true/false <message> or !message disable`);            
           }
         } else if (args[0] == "disable") {
           wss.clients.forEach(async (ws) => {
-            ws.send(`message end`)
+            ws.send(`message end`);
+            global.globalData.message.enabled = false;
+            global.globalData.message.transparent = "true";
+            global.globalData.message.message = "";
           });
         } else {
           client.say(channel, `@${tags.username}, Dont forget to specify all the parameters! !message enable true/false <message> or !message disable`);

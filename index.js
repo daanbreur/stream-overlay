@@ -34,8 +34,13 @@ client.database = mongoose.connection;
 client.connect();
 
 global.globalData = {
-	bannerColor: '#' + ((Math.random() * 0xffffff) << 0).toString(16).padStart(6, '0'),
-	ltsFollower: '',
+	bannerColor: "#" + ((Math.random() * 0xffffff) << 0).toString(16).padStart(6, "0"),
+	ltsFollower: "",
+	message: {
+		enabled: false,
+		transparent: "true",
+		message: ""
+	}
 };
 
 
@@ -96,6 +101,11 @@ wss.on('connection', async (ws) => {
 	ws.isAlive = true;
 	ws.send(`color ${globalData.bannerColor}`);
 	ws.send(`setfollower ${globalData.ltsFollower}`);
+	if (global.globalData.message.enabled) {
+		ws.send(`message start ${global.globalData.message.transparent} ${global.globalData.message.message}`);
+	} else {
+		ws.send(`message end`);
+	}
 
 	ws.on('pong', () => { ws.isAlive = true });
 	ws.on('message', async (message) => { info(`Websocket Server`, `Recieved: ${message}`) });
