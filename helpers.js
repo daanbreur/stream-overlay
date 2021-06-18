@@ -61,7 +61,7 @@ module.exports.checkColor = function (color) {
 		color = color.toLowerCase();
 		if (colors[color]) resolve(colors[color]);
 		if (re.test(color)) resolve(color);
-		else reject();
+		else reject(color);
 	});
 };
 
