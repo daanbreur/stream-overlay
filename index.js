@@ -128,6 +128,7 @@ StreamelementsClient.on('event', (data) => {
 	if (data.provider.toLowerCase() == 'twitch') {
 		switch (data.type.toLowerCase()) {
 			case 'follow':
+				global.globalData.ltsFollower = data.data.displayName;
 				wss.clients.forEach( (ws) => {
 					ws.send(`setfollower ${data.data.displayName}`);
 					ws.send(`alert follow ${data.data.displayName}`);
