@@ -1,4 +1,4 @@
-const { err } = require("../logger");
+const { err, info } = require("../logger");
 const User = require("../models/User");
 
 module.exports.run = async (client, wss, message, args, {channel, tags}) => {
@@ -10,12 +10,12 @@ module.exports.run = async (client, wss, message, args, {channel, tags}) => {
 			} else if (document.permissions.overlayMessage) {
         if (args[0] == "enable" && args.length >= 3) {
           let messageText = args.slice(2,args.length).join(" ");
-          if (args[1] !== "true" || args[1] !== "false") { 
-            client.say(channel, `@${tags.username}, Incorrect Parameters !message enable true/false <message> or !message disable`);
-          } else {
+          if (args[1] == "true" || args[1] == "false") { 
             wss.clients.forEach(async (ws) => {
               ws.send(`message start ${args[1]} ${messageText}`)
             });
+          } else {
+            client.say(channel, `@${tags.username}, Incorrect Parameters !message enable true/false <message> or !message disable`);            
           }
         } else if (args[0] == "disable") {
           wss.clients.forEach(async (ws) => {
