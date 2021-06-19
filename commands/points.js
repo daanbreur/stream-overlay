@@ -11,7 +11,7 @@ module.exports.run = async (client, wss, message, args, { channel, tags }) => {
 				client.say(channel, `@${tags.username}, You have ${document.points} points.`);
 			}
 		})
-		.catch((err) => err("Command: points", err));
+		.catch((error) => err("Command: points", error));
 };
 
 module.exports.config = {

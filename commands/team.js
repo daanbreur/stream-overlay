@@ -13,7 +13,7 @@ module.exports.run = async (client, wss, message, args, { channel, tags }) => {
 				}
 				client.say(channel, `@${tags.username}, You have successfully joined team ${args[0]}`);
 			})
-			.catch((err) => err("Command: team", err));
+			.catch((error) => err("Command: team", error));
 	} else {
 		client.say(channel, `@${tags.username}, To join a team. Type !team red or !team blue`);
 		let userInDatabase = await User.exists({ twitchId: tags["user-id"] });

@@ -35,7 +35,7 @@ module.exports.run = async (client, wss, message, args, {channel, tags}) => {
         client.say(channel, `@${tags.username}, You dont have permissions to use this command. Required Permissions: overlayMessage`);
       }
 		})
-		.catch((err) => err("Command: message", err));
+		.catch((error) => err("Command: message", error));
 };
 
 module.exports.config = {
