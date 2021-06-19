@@ -56,12 +56,9 @@ async function alertBoxHandler(maintext, subtext) {
 }
 
 async function alertBox(maintext, subtext) {
-	let mainText = document.getElementsByClassName('maintext')[0];
-	let subText = document.getElementsByClassName('subtext')[0];
-	let animContainer = document.getElementsByClassName(
-		'alertAnimContainer'
-	)[0];
-
+	let mainText = document.getElementById('alertMaintext');
+	let subText = document.getElementById('alertSubtext');
+	let animContainer = document.getElementsByClassName('alertAnimContainer')[0];
 	let anim = document.getElementsByClassName('anim')[0];
 
 	mainText.innerText = maintext;
