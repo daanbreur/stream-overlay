@@ -71,6 +71,8 @@ body { background-color: rgba(0,0,0,0); }
 
 /* Glitchy Text */
 .glitch {
+	-webkit-text-stroke-color: #000;
+	-webkit-text-stroke-width: 1px;
 	position: relative;
 	color: white;
 	font-size: 4em;
