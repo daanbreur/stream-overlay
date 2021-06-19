@@ -6,5 +6,9 @@
   "editor.fontFamily": "OpenDyslexic, Consolas, 'Courier New', monospace",
   "workbench.colorTheme": "GitHub Dark",
   "workbench.iconTheme": "material-icon-theme",
-  "terminal.integrated.fontFamily": "Consolas, 'Courier New', monospace"
+  "terminal.integrated.fontFamily": "Consolas, 'Courier New', monospace",
+  "screencastMode.fontSize": 30,
+  "screencastMode.verticalOffset": 2,
+  "screencastMode.onlyKeyboardShortcuts": true,
+  "screencastMode.mouseIndicatorColor": "#FFAABC"
 }
