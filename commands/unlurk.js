@@ -20,7 +20,7 @@ module.exports.run = async (client, wss, message, args, { channel, tags }) => {
         );
       }
     })
-    .catch((error) => err('Command: lurk', error));
+    .catch((error) => err('Command: unlurk', error));
 };
 
 module.exports.config = {
