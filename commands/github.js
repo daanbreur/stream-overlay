@@ -9,18 +9,21 @@ module.exports.run = async (client, wss, message, args, { channel, tags }) => {
           twitchId: tags['user-id'],
           displayName: tags['display-name'],
         });
-        client.say(channel, `@${tags.username}, You have 0 points.`);
+        client.say(
+          channel,
+          `@${tags.username}, my github is https://github.com/daanbreur`
+        );
       } else {
         client.say(
           channel,
-          `@${tags.username}, You have ${document.points} points.`
+          `@${tags.username}, my github is https://github.com/daanbreur`
         );
       }
     })
-    .catch((error) => err('Command: points', error));
+    .catch((error) => err('Command: github', error));
 };
 
 module.exports.config = {
-  name: 'points',
-  aliases: ['point', 'p'],
+  name: 'github',
+  aliases: ['gh'],
 };
