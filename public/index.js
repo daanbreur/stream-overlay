@@ -13,6 +13,10 @@ const events = {
     "alert": async (args) => { parseAlertParams(args); },
     "color": async (color) => { banner.style.backgroundColor = color; },
     "setfollower": async (username) => { follower.innerText = `Latest Follower: ${username}`; },
+    "settipper": async ([username, tip]) => { 
+        if (username == "" || tip == "") return (tipper.innerText = `Last Donation: Err_Tip_Load_Failed`);
+        tipper.innerText = `Last Donation: ${username} (${tip})`;
+    },
     "message": async ([type, ...[transparent, ...message]]) => {
         console.log(type, transparent, message)
         if (type === "start") {

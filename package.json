@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "nodemon index.js"
+    "test": "nodemon index.js",
+    "migrate:up": "migrate --migrations-dir=\"./migrations\" up",
+    "migrate:down": "migrate --migrations-dir=\"./migrations\" down",
+    "migrate:create": "migrate create --template-file ./migrations-utils/template.js --migrations-dir=\"./migrations\""
   },
   "keywords": [],
   "author": "",
@@ -14,16 +17,16 @@
     "colors": "^1.4.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "informa-db.js": "^5.5.0",
-    "mongoose": "^5.12.13",
-    "node-fetch": "^2.6.0",
+    "migrate": "^1.7.0",
+    "mongoose": "^5.13.12",
+    "node-fetch": "^2.6.5",
     "require-all": "^3.0.0",
     "socket.io-client": "^2.4.0",
-    "tmi.js": "^1.5.0",
-    "ws": "^7.3.1"
+    "tmi.js": "^1.8.5",
+    "ws": "^7.5.5"
   },
   "devDependencies": {
-    "dotenv": "^8.2.0",
-    "nodemon": "^2.0.4"
+    "dotenv": "^8.6.0",
+    "nodemon": "^2.0.14"
   }
 }

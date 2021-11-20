@@ -16,6 +16,16 @@ const cors = require('cors');
 const WebSocketServer = require('ws').Server, wss = new WebSocketServer({ port: 40510 });
 const io = require('socket.io-client'), StreamelementsClient = io(`https://realtime.streamelements.com`, {transports: ['websocket']});
 
+StreamelementsClient.on('connect', () => {
+	info(`StreamelementsClient`, `Successfully connected to Server!`);
+	StreamelementsClient.emit('authenticate', {
+		method: 'jwt',
+		token: process.env.STREAMELEMENTS_JWT
+	})
+});
+StreamelementsClient.on('disconnect', () => info(`StreamelementsClient`, `Disconnected from Server!`));
+StreamelementsClient.on('authenticated', (data) => info(`StreamelementsClient`, `Successfully authenticated to Server! Channel: ${data.channelId}`));
+
 const client = new TMI.client({
 	connection: {
 		secure: true,
@@ -36,6 +46,10 @@ client.connect();
 global.globalData = {
 	bannerColor: "#" + ((Math.random() * 0xffffff) << 0).toString(16).padStart(6, "0"),
 	ltsFollower: "",
+	ltsTipper: {
+		"username": "",
+		"tip": ""
+	},
 	message: {
 		enabled: false,
 		transparent: "true",
@@ -83,11 +97,15 @@ app.listen(process.env.PORT, async () => {
 });
 
 
+// On Handlers
 
 client.on('message', async (channel, tags, message, self) => {
 	if (self) return;
 
 	const prefix = '!';
+
+	if (!message.startsWith(prefix)) return;
+
 	const [cmd, ...args] = message.trim().slice(prefix.length).split(/\s+/g);
 
 	const command = client.commands.get(cmd) || client.commands.get(client.aliases.get(cmd));
@@ -101,6 +119,7 @@ wss.on('connection', async (ws) => {
 	ws.isAlive = true;
 	ws.send(`color ${globalData.bannerColor}`);
 	ws.send(`setfollower ${globalData.ltsFollower}`);
+	ws.send(`settipper ${globalData.ltsTipper.username} ${globalData.ltsTipper.tip}`)
 	if (global.globalData.message.enabled) {
 		ws.send(`message start ${global.globalData.message.transparent} ${global.globalData.message.message}`);
 	} else {
@@ -111,20 +130,47 @@ wss.on('connection', async (ws) => {
 	ws.on('message', async (message) => { info(`Websocket Server`, `Recieved: ${message}`) });
 });
 
-
-StreamelementsClient.on('connect', () => {
-	info(`StreamelementsClient`, `Successfully connected to Server!`);
-	StreamelementsClient.emit('authenticate', {
-		method: 'jwt',
-		token: process.env.STREAMELEMENTS_JWT
-	})
+StreamelementsClient.on('event:test', (data) => {
+	console.log("Test Event", data)
+	switch (data.listener.toLowerCase()) {
+		case 'follower-latest':
+			global.globalData.ltsFollower = data.event.displayName;
+			wss.clients.forEach( (ws) => {
+				ws.send(`setfollower ${data.event.displayName}`);
+				ws.send(`alert follow ${data.event.displayName}`);
+			});
+			break;
+		case 'raid-latest':
+			wss.clients.forEach( (ws) => {
+				ws.send(`alert raid ${data.event.displayName} ${data.event.amount}`);
+			});
+			break;
+		case 'host-latest':
+			wss.clients.forEach( (ws) => {
+				ws.send(`alert host ${data.event.displayName}`);
+			});
+			break;
+		case 'tip-latest':
+			let formattedAmount = new Intl.NumberFormat('nl-NL', { style: 'currency', currency: data.event.currency }).format(data.event.amount);
+			wss.clients.forEach( (ws) => {
+				ws.send(`alert donation ${data.event.name} ${formattedAmount}`);
+			});	
+			break;
+		case 'subscriber-latest':
+			wss.clients.forEach( (ws) => {
+				ws.send(`alert subscription ${data.event.displayName}`);
+			});
+			break;
+		case 'cheer-latest':
+			wss.clients.forEach( (ws) => {
+				ws.send(`alert cheer ${data.event.displayName} ${data.event.amount}`);
+			});
+			break;
+	}
 });
-StreamelementsClient.on('disconnect', () => info(`StreamelementsClient`, `Disconnected from Server!`));
-StreamelementsClient.on('authenticated', (data) => info(`StreamelementsClient`, `Successfully authenticated to Server! Channel: ${data.channelId}`));
 
 StreamelementsClient.on('event', (data) => {
-	console.log(data);
-
+	console.log("Normal Event", data)
 	if (data.provider.toLowerCase() == 'twitch') {
 		switch (data.type.toLowerCase()) {
 			case 'follow':
@@ -146,7 +192,10 @@ StreamelementsClient.on('event', (data) => {
 				break;
 			case 'tip':
 				let formattedAmount = new Intl.NumberFormat('nl-NL', { style: 'currency', currency: data.data.currency }).format(data.data.amount);
+				globalData.ltsTipper.username = data.data.username;
+				globalData.ltsTipper.tip = formattedAmount;
 				wss.clients.forEach( (ws) => {
+					ws.send(`settipper ${data.data.username} ${formattedAmount}`);
 					ws.send(`alert donation ${data.data.username} ${formattedAmount}`);
 				});	
 				break;
@@ -163,53 +212,3 @@ StreamelementsClient.on('event', (data) => {
 		}
 	}
 });
-
-// StreamelementsClient.on('event', async (eventData) => {
-// 	log(`StreamelementsClient`, eventData);
-// 	let data = eventData.message[0]
-// 	if (eventData.for === 'twitch_account') {
-// 		switch(eventData.type) {
-// 			case 'follow':
-// 				wss.clients.forEach((ws) => {
-// 					ws.send(`setfollower ${data.name}`);
-// 					ws.send(`alert follow ${data.name}`);
-// 				});
-// 				break;
-// 			case 'subscription':
-// 				wss.clients.forEach((ws) => { ws.send(`alert subscription ${data.name}`) });
-// 				break;
-// 			case 'resub':
-// 				wss.clients.forEach((ws) => { ws.send(`alert resub ${data.name} ${~~data.months}`) });
-// 				break;
-// 			case 'host':
-// 				wss.clients.forEach((ws) => { ws.send(`alert host ${data.name}`) });
-// 				break;
-// 			case 'raid':
-// 				wss.clients.forEach((ws) => { ws.send(`alert raid ${data.name} ${data.raiders}`) });
-// 				break;
-// 		}
-// 	} else if (eventData.for === 'streamlabs') {
-// 		switch(eventData.type) {
-// 			case 'donation':
-// 				wss.clients.forEach((ws) => { ws.send(`alert donation ${data.name} ${data.formatted_amount}`) });
-// 				break;
-// 		}
-// 	}
-// })
-
-// {
-//   _id: '60b8bab383809a64938e7922',
-//   channel: '5f00ac843cd73291a4170b58',
-//   type: 'follow',
-//   provider: 'twitch',
-//   flagged: false,
-//   data: {
-//     username: 'mr_no_man123',
-//     providerId: '582882096',
-//     displayName: 'mr_no_man123',
-//     quantity: 0,
-//     avatar: 'https://cdn.streamelements.com/static/default-avatar.png'
-//   },
-//   createdAt: '2021-06-03T11:19:15.285Z',
-//   updatedAt: '2021-06-03T11:19:15.285Z'
-// }
