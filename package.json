@@ -8,7 +8,8 @@
     "test": "nodemon index.js",
     "migrate:up": "migrate --migrations-dir=\"./migrations\" up",
     "migrate:down": "migrate --migrations-dir=\"./migrations\" down",
-    "migrate:create": "migrate create --template-file ./migrations-utils/template.js --migrations-dir=\"./migrations\""
+    "migrate:create": "migrate create --template-file ./migrations-utils/template.js --migrations-dir=\"./migrations\"",
+    "clean": "prettier ."
   },
   "keywords": [],
   "author": "",
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "dotenv": "^8.6.0",
-    "nodemon": "^2.0.14"
+    "nodemon": "^2.0.14",
+    "prettier": "^2.4.1"
   }
 }

@@ -9,18 +9,21 @@ module.exports.run = async (client, wss, message, args, { channel, tags }) => {
           twitchId: tags['user-id'],
           displayName: tags['display-name'],
         });
-        client.say(channel, `@${tags.username}, You have 0 points.`);
+        client.say(
+          channel,
+          `@${tags.username}, my twitter is https://twitter.com/PortaalG`
+        );
       } else {
         client.say(
           channel,
-          `@${tags.username}, You have ${document.points} points.`
+          `@${tags.username}, my twitter is https://twitter.com/PortaalG`
         );
       }
     })
-    .catch((error) => err('Command: points', error));
+    .catch((error) => err('Command: twitter', error));
 };
 
 module.exports.config = {
-  name: 'points',
-  aliases: ['point', 'p'],
+  name: 'twitter',
+  aliases: ['tw'],
 };
