@@ -34,5 +34,5 @@ module.exports.run = async (client, wss, message, args, {channel, tags}) => {
 
 module.exports.config = {
   name: "createCommand",
-  aliases: ["updateCommand"]
+  aliases: ["updateCommand", "addcmd", "addcommand"]
 }
