@@ -23,5 +23,5 @@ module.exports.run = async (client, wss, message, args, {channel, tags}) => {
 
 module.exports.config = {
   name: "listPermissions",
-  aliases: ["checkPermissions"]
+  aliases: ["checkPermissions", "checkperms"]
 }
