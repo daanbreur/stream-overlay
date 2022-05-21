@@ -20,7 +20,7 @@ module.exports.run = async (client, wss, message, args, { channel, tags }) => {
         );
       }
     })
-    .catch((error) => err('Command: blog', error));
+    .catch((error) => err('Command: discord', error));
 };
 
 module.exports.config = {
